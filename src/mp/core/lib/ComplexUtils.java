@@ -132,20 +132,23 @@ public final class ComplexUtils {
 	 * @return z^exp, or (a + bi)^(c + di).
 	 */
 	public static Complex pow(Complex z, Complex exp, int branch) {
-		double r = mod(z);
+		double a = z.real();
+		double b = z.imaginary();
+		
+		double rSquared = (a * a) + (b * b);
 		double theta = arg(z) + (Math.PI * 2 * branch);
 		
-		double logR = RealUtils.ln(r);
+		double lnRSquared = RealUtils.ln(rSquared);
 		
 		double c = exp.real();
 		double d = exp.imaginary();
 		
-		double firstPart = Math.pow(Math.E, ((c / 2) * logR) - (d * theta));
+		double powerOfE = Math.pow(Math.E, ((c / 2) * lnRSquared) - (d * theta));
 		
-		double inner = ((d / 2) * logR) + (c * theta);
+		double inner = ((d / 2) * lnRSquared) + (c * theta);
 		
-		double real = firstPart * Math.cos(inner);
-		double imaginary = firstPart * Math.sin(inner);
+		double real = powerOfE * Math.cos(inner);
+		double imaginary = powerOfE * Math.sin(inner);
 		
 		return new Complex(real, imaginary);
 	}
