@@ -1,6 +1,9 @@
 package mp.core.lib;
 
-public final class RealUtils {
+/**
+ * A class providing useful functions that aren't included in the normal java.lang.Math class.
+ */
+public final class RealMath {
 	/**
 	 * Returns the logarithm base b of x.
 	 * @param x The real number.

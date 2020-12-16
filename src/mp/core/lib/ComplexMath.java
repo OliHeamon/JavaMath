@@ -1,47 +1,9 @@
 package mp.core.lib;
 
-public final class ComplexUtils {
-	/**
-	 * Returns the modulus of z; if z = a + bi then |z| = sqrt(a^2 + b^2). This may also be expressed as the distance that z lies from the origin.
-	 * @param z The complex number.
-	 * @return |z|.
-	 */
-	public static double mod(Complex z) {
-		double a = z.real();
-		double b = z.imaginary();
-		
-		return Math.sqrt((a * a) + (b * b));
-	}
-	
-	/**
-	 * Returns the argument of z; if z = a + bi then Arg(z) = <br>
-	 * {<br>
-	 *     a > 0, b = 0: 0<br>
-	 *     a < 0, b = 0: pi<br>
-	 *     b != 0: 2 * arctan(b / (sqrt(a^2 + b^2) + a))<br>
-	 *     else: NaN<br>
-	 * }<br>
-	 * This can also be described as the rotation away from the real number line where z is.
-	 * @param z The complex number.
-	 * @return Arg(z).
-	 */
-	public static double arg(Complex z) {
-		double a = z.real();
-		double b = z.imaginary();
-		
-		if (b != 0) {
-			return 2 * Math.atan2(b, Math.sqrt((a * a) + (b * b)) + a);
-		}
-		else if (a > 0 && b == 0) {
-			return 0;
-		}
-		else if (a < 0 && b == 0) {
-			return Math.PI;
-		}
-		
-		return Double.NaN;
-	}
-	
+/**
+ * A class which provides an extension of the normal java.lang.Math functions for complex arithmetic.
+ */
+public final class ComplexMath {
 	/**
 	 * Returns the logarithm base b of z.
 	 * @param z The complex number.
@@ -60,9 +22,9 @@ public final class ComplexUtils {
 	 * @return logB(z).
 	 */
 	public static Complex logB(Complex z, double b, int branch) {
-		double theta = arg(z) + (Math.PI * 2 * branch);
+		double theta = z.arg() + (Math.PI * 2 * branch);
 		
-		return new Complex(RealUtils.logB(mod(z), b), RealUtils.logB(Math.E, b) * theta);
+		return new Complex(RealMath.logB(z.mod(), b), RealMath.logB(Math.E, b) * theta);
 	}
 	
 	/**
@@ -102,11 +64,11 @@ public final class ComplexUtils {
 	 * @return z^exp, or (a + bi)^n.
 	 */
 	public static Complex pow(Complex z, double exp, int branch) {		
-		double r = mod(z);
+		double r = z.mod();
 		
 		double rToTheN = Math.pow(r, exp);
 		
-		double theta = arg(z) + (Math.PI * 2 * branch);
+		double theta = z.arg() + (Math.PI * 2 * branch);
 		
 		double real = rToTheN * Math.cos(exp * theta);
 		double imaginary = rToTheN * Math.sin(exp * theta);
@@ -136,9 +98,9 @@ public final class ComplexUtils {
 		double b = z.imaginary();
 		
 		double rSquared = (a * a) + (b * b);
-		double theta = arg(z) + (Math.PI * 2 * branch);
+		double theta = z.arg() + (Math.PI * 2 * branch);
 		
-		double lnRSquared = RealUtils.ln(rSquared);
+		double lnRSquared = RealMath.ln(rSquared);
 		
 		double c = exp.real();
 		double d = exp.imaginary();

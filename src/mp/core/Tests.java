@@ -1,35 +1,43 @@
 package mp.core;
 
 import mp.core.lib.Complex;
-import mp.core.lib.ComplexUtils;
-import mp.core.lib.RealUtils;
+import mp.core.lib.ComplexMath;
+import mp.core.lib.RealMath;
 
 public class Tests {
 	private static int failed;
 	
-	private static final double EPSILON = 1e-9; // Rest results will be accurate to within 1/1000000000 of the genuine values.
+	// Test results will be accurate to within 1e-9 (1 / 1,000,000,000) of their genuine values.
+	// This is required due to the fact that floating-point arithmetic errors will mean two values are extremely unlikely to be perfectly equal, even if they are supposed to be.
+	// As such, the best means of checking equality is to see if the difference between the values is lower than a given difference, known as an epsilon.
+	private static final double EPSILON = 1e-9;
 	
 	public static void main(String[] args) {
 		failed = 0;
 		
-		test("Complex number parsing (1 + i)", new Complex("1 + i"), new Complex(1, 1));
-		test("Complex number parsing (1 - 2i)", new Complex("1 - 2i"), new Complex(1, -2));
-		test("Complex number parsing (-1 + 2i)", new Complex("-1 + 2i"), new Complex(-1, 2));
-		test("Complex number parsing (-1 - i)", new Complex("-1 - i"), new Complex(-1, -1));
-		test("Complex number parsing (1.912871 - 7.837i)", new Complex("1.912871 - 7.837i"), new Complex(1.912871, -7.837));
+		test("Complex number parsing (1 + i)", Complex.parse("1 + i"), new Complex(1, 1));
+		test("Complex number parsing (1 - 2i)", Complex.parse("1 - 2i"), new Complex(1, -2));
+		test("Complex number parsing (-1 + 2i)", Complex.parse("-1 + 2i"), new Complex(-1, 2));
+		test("Complex number parsing (-1 - i)", Complex.parse("-1 - i"), new Complex(-1, -1));
+		test("Complex number parsing (1.912871 - 7.837i)", Complex.parse("1.912871 - 7.837i"), new Complex(1.912871, -7.837));
 		
-		test("Logarithms (Logarithm base 2 of 2, 1 expected)", RealUtils.logB(2, 2), 1);
-		test("Logarithms (Natural logarithm of e^2, 2 expected)", RealUtils.ln(Math.E * Math.E), 2);
-		test("Logarithms (Natural logarithm of 0 + i, ipi/2 expected)", ComplexUtils.ln(new Complex(0, 1)), new Complex(0, Math.PI / 2));
-		test("Logarithms (Natural logarithm of -1 + 0i, ipi expected)", ComplexUtils.ln(new Complex(-1, 0)), new Complex(0, Math.PI));
+		test("Logarithms (Logarithm base 2 of 2, 1 expected)", RealMath.logB(2, 2), 1);
+		test("Logarithms (Natural logarithm of e^2, 2 expected)", RealMath.ln(Math.E * Math.E), 2);
+		test("Logarithms (Natural logarithm of 0 + i, ipi/2 expected)", ComplexMath.ln(new Complex(0, 1)), new Complex(0, Math.PI / 2));
+		test("Logarithms (Natural logarithm of -1 + 0i, ipi expected)", ComplexMath.ln(new Complex(-1, 0)), new Complex(0, Math.PI));
 		
-		test("Arguments (1 + i, pi/4 expected)", ComplexUtils.arg(new Complex(1, 1)), Math.PI / 4);
-		test("Arguments (-1 + i, 3pi/4 expected)", ComplexUtils.arg(new Complex(-1, 1)), (3 * Math.PI) / 4);
-		test("Arguments (-1 - i, -3pi/4 expected)", ComplexUtils.arg(new Complex(-1, -1)), -(3 * Math.PI) / 4);
-		test("Arguments (1 - i, -pi/4 expected)", ComplexUtils.arg(new Complex(1, -1)), -Math.PI / 4);
+		test("Arguments (1 + i, pi/4 expected)", new Complex(1, 1).arg(), Math.PI / 4);
+		test("Arguments (-1 + i, 3pi/4 expected)", new Complex(-1, 1).arg(), (3 * Math.PI) / 4);
+		test("Arguments (-1 - i, -3pi/4 expected)", new Complex(-1, -1).arg(), -(3 * Math.PI) / 4);
+		test("Arguments (1 - i, -pi/4 expected)", new Complex(1, -1).arg(), -Math.PI / 4);
 		
-		test("Complex numbers with real exponents ((1 + i)^2)", ComplexUtils.pow(new Complex(1, 1), 2), new Complex(0, 2));
-		test("Complex numbers with complex exponents (i^i)", ComplexUtils.pow(new Complex(0, 1), new Complex(0, 1)), new Complex(Math.pow(Math.E, -Math.PI / 2), 0));
+		test("Complex numbers with real exponents ((1 + i)^2, 2i expected)", ComplexMath.pow(new Complex(1, 1), 2), new Complex(0, 2));
+		test("Complex numbers with complex exponents (i^i, e^-pi/2 expected)", ComplexMath.pow(new Complex(0, 1), new Complex(0, 1)), new Complex(Math.pow(Math.E, -Math.PI / 2), 0));
+		
+		test("Complex addition ((1 + i) + (2 - 3i), (3 - 2i) expected", new Complex(1, 1).add(new Complex(2, -3)), new Complex(3, -2));
+		test("Complex subtraction ((2 - 5i) - (3 + 3i), (-1 - 8i) expected", new Complex(2, -5).sub(new Complex(3, 3)), new Complex(-1, -8));
+		test("Complex multiplication ((1 + i)(2 + 2i), 4i expected", new Complex(1, 1).mul(new Complex(2, 2)), new Complex(0, 4));
+		test("Complex division ((6 - 4i) / (2 - 2i), (2.5 + 0.5i) expected", new Complex(6, -4).div(new Complex(2, -2)), new Complex(2.5, 0.5));
 		
 		System.out.println("Test comparisons accurate within an epsilon of " + EPSILON);
 		System.out.println("Failed: " + failed);
@@ -56,8 +64,6 @@ public class Tests {
 		
 		System.out.println(description + String.format(": Failed! (%s returned).", value));
 	}
-	
-	// The equality tests use an epsilon because floating-point errors mean it's extremely unlikely that desired results and obtained results will be absolutely identical.
 	
 	private static boolean fuzzyEquals(double a, double b) {
 		return Math.abs(a - b) < EPSILON;
