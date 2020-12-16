@@ -7,13 +7,15 @@ import mp.core.lib.RealMath;
 public class Tests {
 	private static int failed;
 	
-	// Test results will be accurate to within 1e-9 (1 / 1,000,000,000) of their genuine values.
+	// Test results will be accurate to within 1e-15 (1 / 1,000,000,000,000,000) of their genuine values.
 	// This is required due to the fact that floating-point arithmetic errors will mean two values are extremely unlikely to be perfectly equal, even if they are supposed to be.
 	// As such, the best means of checking equality is to see if the difference between the values is lower than a given difference, known as an epsilon.
-	private static final double EPSILON = 1e-9;
+	private static final double EPSILON = 1e-15;
 	
 	public static void main(String[] args) {
 		failed = 0;
+		
+		test("Factorial for integers (5!, 120 expected)", RealMath.fact(5), 120);
 		
 		test("Complex number parsing (1 + i)", Complex.parse("1 + i"), new Complex(1, 1));
 		test("Complex number parsing (1 - 2i)", Complex.parse("1 - 2i"), new Complex(1, -2));
@@ -33,11 +35,16 @@ public class Tests {
 		
 		test("Complex numbers with real exponents ((1 + i)^2, 2i expected)", ComplexMath.pow(new Complex(1, 1), 2), new Complex(0, 2));
 		test("Complex numbers with complex exponents (i^i, e^-pi/2 expected)", ComplexMath.pow(new Complex(0, 1), new Complex(0, 1)), new Complex(Math.pow(Math.E, -Math.PI / 2), 0));
+		test("Real numbers with complex exponents (e^(0 + ipi), -1 expected)", ComplexMath.pow(Math.E, new Complex(0, Math.PI)),
+			new Complex(-1, 0));
 		
 		test("Complex addition ((1 + i) + (2 - 3i), (3 - 2i) expected", new Complex(1, 1).add(new Complex(2, -3)), new Complex(3, -2));
 		test("Complex subtraction ((2 - 5i) - (3 + 3i), (-1 - 8i) expected", new Complex(2, -5).sub(new Complex(3, 3)), new Complex(-1, -8));
 		test("Complex multiplication ((1 + i)(2 + 2i), 4i expected", new Complex(1, 1).mul(new Complex(2, 2)), new Complex(0, 4));
 		test("Complex division ((6 - 4i) / (2 - 2i), (2.5 + 0.5i) expected", new Complex(6, -4).div(new Complex(2, -2)), new Complex(2.5, 0.5));
+
+		test("Complex trigonometry (sin(pi/2 -ln(2 + sqrt(3))i), 2 expected)",
+			ComplexMath.sin(new Complex(Math.PI / 2, -RealMath.ln(2 + Math.sqrt(3)))), new Complex(2, 0));
 		
 		System.out.println("Test comparisons accurate within an epsilon of " + EPSILON);
 		System.out.println("Failed: " + failed);

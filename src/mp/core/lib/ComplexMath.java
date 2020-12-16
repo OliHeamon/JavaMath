@@ -114,4 +114,59 @@ public final class ComplexMath {
 		
 		return new Complex(real, imaginary);
 	}
+	
+	/**
+	 * Returns n raised to the given complex exponent.
+	 * @param n The real number.
+	 * @param exp The complex exponent.
+	 * @return n^(a + bi).
+	 */
+	public static Complex pow(double n, Complex exp) {
+		return pow(n,  exp, 0);
+	}
+	
+	/**
+	 * Returns n raised to the given complex exponent.
+	 * @param n The real number.
+	 * @param exp The complex exponent.
+	 * @param branch The branch of the function to use (a given branch N will add 2 * pi * N to the argument).
+	 * @return n^(a + bi).
+	 */
+	public static Complex pow(double n, Complex exp, int branch) {
+		double a = exp.real();
+		double b = exp.imaginary();
+		
+		double powerOfE = Math.pow(Math.E, a * RealMath.ln(n));
+		
+		double inner = (b * RealMath.ln(n)) + (Math.PI * 2 * branch);
+		
+		double real = powerOfE * Math.cos(inner);
+		double imaginary = powerOfE * Math.sin(inner);
+		
+		return new Complex(real, imaginary);
+	}
+	
+	public static Complex sin(Complex z) {
+		double a = z.real();
+		double b = z.imaginary();
+		
+		Complex numerator = ComplexMath.pow(Math.E, new Complex(-b, a)).sub(ComplexMath.pow(Math.E, new Complex(b, -a)));
+		Complex denominator = new Complex(0, 2);
+		
+		return numerator.div(denominator);
+	}
+	
+	public static Complex cos(Complex z) {
+		double a = z.real();
+		double b = z.imaginary();
+		
+		Complex numerator = ComplexMath.pow(Math.E, new Complex(-b, a)).add(ComplexMath.pow(Math.E, new Complex(b, -a)));
+		Complex denominator = new Complex(2, 0);
+		
+		return numerator.div(denominator);
+	}
+	
+	public static Complex tan(Complex z) {
+		return sin(z).div(cos(z));
+	}
 }
