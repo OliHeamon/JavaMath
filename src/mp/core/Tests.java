@@ -46,6 +46,23 @@ public class Tests {
 		test("Complex trigonometry (sin(pi/2 -ln(2 + sqrt(3))i), 2 expected)",
 			ComplexMath.sin(new Complex(Math.PI / 2, -RealMath.ln(2 + Math.sqrt(3)))), new Complex(2, 0));
 		
+		test("Complex trigonometry (cos(-ln(2 + sqrt(3))i), 2 expected)",
+			ComplexMath.cos(new Complex(0, -RealMath.ln(2 + Math.sqrt(3)))), new Complex(2, 0));
+		
+		test("Complex trigonometry (tan(i), ~0.761594i expected)",
+			ComplexMath.tan(new Complex(0, 1)), new Complex(0, Math.tanh(1)));
+		
+		test("Complex trigonometry (sec(-ln(2 + sqrt(3))i)), 0.5 expected)",
+			ComplexMath.sec(new Complex(0, -RealMath.ln(2 + Math.sqrt(3)))), new Complex(0.5, 0));
+		
+		test("Complex trigonometry (csc(pi/2 -ln(2 + sqrt(3))i), 0.5 expected)",
+			ComplexMath.csc(new Complex(Math.PI / 2, -RealMath.ln(2 + Math.sqrt(3)))), new Complex(0.5, 0));
+		
+		test("Complex trigonometry (cot(i), ~-1.313035i expected)",
+			ComplexMath.cot(new Complex(0, 1)), new Complex(0, 1 / -Math.tanh(1)));
+		
+		// Add tests for hyperbolics.
+		
 		System.out.println("Test comparisons accurate within an epsilon of " + EPSILON);
 		System.out.println("Failed: " + failed);
 	}

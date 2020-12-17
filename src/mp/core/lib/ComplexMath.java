@@ -146,6 +146,11 @@ public final class ComplexMath {
 		return new Complex(real, imaginary);
 	}
 	
+	/**
+	 * Returns the sine of z.
+	 * @param z The complex number.
+	 * @return sin(z).
+	 */
 	public static Complex sin(Complex z) {
 		double a = z.real();
 		double b = z.imaginary();
@@ -156,6 +161,11 @@ public final class ComplexMath {
 		return numerator.div(denominator);
 	}
 	
+	/**
+	 * Returns the cosine of z.
+	 * @param z The complex number.
+	 * @return cos(z).
+	 */
 	public static Complex cos(Complex z) {
 		double a = z.real();
 		double b = z.imaginary();
@@ -166,7 +176,105 @@ public final class ComplexMath {
 		return numerator.div(denominator);
 	}
 	
+	/**
+	 * Returns the tangent of z.
+	 * @param z The complex number.
+	 * @return tan(z).
+	 */
 	public static Complex tan(Complex z) {
 		return sin(z).div(cos(z));
+	}
+	
+	/**
+	 * Returns the secant of z.
+	 * @param z The complex number.
+	 * @return sec(z).
+	 */
+	public static Complex sec(Complex z) {
+		return new Complex(1, 0).div(cos(z));
+	}
+	
+	/**
+	 * Returns the cosecant of z.
+	 * @param z The complex number.
+	 * @return csc(z).
+	 */
+	public static Complex csc(Complex z) {
+		return new Complex(1, 0).div(sin(z));
+	}
+	
+	/**
+	 * Returns the cotangent of z.
+	 * @param z The complex number.
+	 * @return cot(z).
+	 */
+	public static Complex cot(Complex z) {
+		return new Complex(1, 0).div(tan(z));
+	}
+	
+	/**
+	 * Returns the hyperbolic sine of z.
+	 * @param z The complex number.
+	 * @return sinh(z_.
+	 */
+	public static Complex sinh(Complex z) {
+		double a = z.real();
+		double b = z.imaginary();
+		
+		double real = Math.cos(b) * Math.sinh(a);
+		double imaginary = Math.sin(b) * Math.cosh(a);
+		
+		return new Complex(real, imaginary);
+	}
+	
+	/**
+	 * Returns the hyperbolic cosine of z.
+	 * @param z The complex number.
+	 * @return cosh(z).
+	 */
+	public static Complex cosh(Complex z) {
+		double a = z.real();
+		double b = z.imaginary();
+		
+		double real = Math.cos(b) * Math.cosh(a);
+		double imaginary = Math.sin(b) * Math.sinh(a);
+		
+		return new Complex(real, imaginary);
+	}
+	
+	/**
+	 * Returns the hyperbolic tangent of z.
+	 * @param z The complex number.
+	 * @return cosh(z).
+	 */
+	public static Complex tanh(Complex z) {
+		return sinh(z).div(cosh(z));
+	}
+	
+	/**
+	 * Returns the hyperbolic secant of z.
+	 * @param z The complex number.
+	 * @return sech(z).
+	 */
+	public static Complex sech(Complex z) {
+		return new Complex(1, 0).div(cosh(z));
+	}
+	
+	/**
+	 * Returns the hyperbolic cosecant of z.
+	 * @param z The complex number.
+	 * @return csch(z).
+	 */
+	public static Complex csch(Complex z) {
+		return new Complex(1, 0).div(sinh(z));
+	}
+	
+	/**
+	 * Returns the hyperbolic cotangent of z.
+	 * @param z The complex number.
+	 * @return coth(z).
+	 */
+	public static Complex coth(Complex z) {
+		return new Complex(1, 0).div(tanh(z));
 	}
 }
